@@ -2,6 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <!--工具栏-->
     <RelativeLayout
         android:id="@+id/title"
         android:layout_width="match_parent"
@@ -91,7 +93,7 @@
                 android:layout_below="@id/weather_today_city"
                 android:layout_marginLeft="15.0dip"
                 android:layout_marginTop="5.0dip"
-                android:textSize="15.0sp"
+                android:textSize="18.0sp"
                 android:textColor="@android:color/white"
                 android:text="今天14:00发布"
                 android:singleLine="true"
@@ -103,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/weather_today_time"
                 android:layout_marginLeft="15.0dip"
-                android:textSize="15.0sp"
+                android:textSize="18.0sp"
                 android:textColor="@android:color/white"
                 android:text="湿度：50%"
                 android:singleLine="true"
@@ -164,8 +166,8 @@
 
                     <!--pm2.5图片-->
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="70.0dip"
+                        android:layout_height="70.0dip"
                         android:src="@drawable/pm2dot5"
                         android:layout_marginLeft="5.0dip"
                         android:id="@+id/pm_content_image"/>
@@ -175,7 +177,7 @@
 
                 <!--污染等级-->
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="15.0dip"
 
@@ -183,27 +185,84 @@
                     android:textColor="@android:color/white"
                     android:text="重度污染"
                     android:singleLine="true"
-                    android:gravity="center"
+                    android:gravity="right"
                     android:id="@+id/pm_quality"/>
 
 
 
             </LinearLayout>
 
+            <!--今日天气信息块-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="5.0dip"
+
+                android:layout_below="@id/pm"
+                android:id="@+id/weather_today_news">
+
+                <!--天气图片-->
+                <ImageView
+                    android:layout_width="100.0dip"
+                    android:layout_height="100.0dip"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+
+                    android:src="@drawable/today_weather"
+                    android:id="@+id/weather_today_news_image"/>
+                <!--今日信息文字版-->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5.0dip"
+                    android:layout_marginTop="15.0dip"
+                    android:layout_toRightOf="@id/weather_today_news_image"
+                    android:orientation="vertical"
+                    android:id="@+id/weather_today_news_words">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:textSize="20.0sp"
+                        android:textColor="@android:color/white"
+                        android:text="今天 星期一"
+                        android:singleLine="true"
+                        android:id="@+id/weather_today_news_words_week"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:textSize="20.0sp"
+                        android:textColor="@android:color/white"
+                        android:text="11℃ ~ 17℃"
+                        android:singleLine="true"
+                        android:id="@+id/weather_today_news_words_temper"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:textSize="22.0sp"
+                        android:textColor="@android:color/white"
+                        android:text="多云转晴"
+                        android:singleLine="true"
+                        android:id="@+id/weather_today_news_words_climate"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:textSize="20.0sp"
+                        android:textColor="@android:color/white"
+                        android:text="微风"
+                        android:singleLine="true"
+                        android:id="@+id/weather_today_news_words_wind"/>
+                </LinearLayout>
+            </RelativeLayout>
         </RelativeLayout>
-
-        
-
-
-
-
-
-
-
-
-
-
     </LinearLayout>
-
-
 </RelativeLayout>
+
