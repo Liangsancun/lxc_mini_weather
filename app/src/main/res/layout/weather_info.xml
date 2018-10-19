@@ -66,7 +66,7 @@
         android:layout_below="@id/title"
         android:id="@+id/body">
 
-        <!--今日天气信息-->
+        <!--Action bar-->
         <RelativeLayout
             android:id="@+id/weather_today"
             android:layout_width="match_parent"
