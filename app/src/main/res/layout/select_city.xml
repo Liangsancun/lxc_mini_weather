@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/title_select_city">
 
     <!--城市选择界面工具条-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="45.0dip"
-        android:background="#d70d0d">
+        android:background="#d70d0d"
+        android:id="@+id/title_select_city_bar">
         
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@id/title_stick"
+            android:layout_toRightOf="@id/title_select_city_bar_stick"
             android:textSize="20.0sp"
             android:textColor="#ffffffff"
             android:text="当前城市：北京"
@@ -25,18 +27,40 @@
             android:src="@drawable/base_action_bar_back_normal"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:id="@+id/title_back" />
+            android:id="@+id/title_select_city_bar_back" />
 
 
         <ImageView
             android:layout_width="1.0dip"
             android:layout_height="40.0dip"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/title_back"
+            android:layout_toRightOf="@id/title_select_city_bar_back"
             android:background="#A71717"
             android:gravity="center"
-            android:id="@+id/title_stick"/>
+            android:id="@+id/title_select_city_bar_stick"/>
 
     </RelativeLayout>
-    
+
+
+
+    <!--工具栏下面选择城市-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_select_city_bar"
+        android:id="@+id/title_select_city_content">
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:background="#ffffff"
+            android:choiceMode="singleChoice"
+            android:id="@+id/title_select_city_content_search_city_list"
+            android:dividerHeight="2dip">
+
+
+        </ListView>
+    </LinearLayout>
+
 </RelativeLayout>

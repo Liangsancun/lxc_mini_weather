@@ -22,6 +22,8 @@ public class MyApplication extends Application {
     private CityDB myCityDB;
     private List<City> myCityList;
 
+
+
     @Override
     public void onCreate() {
         super.onCreate();

@@ -52,7 +52,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.weather_info);
 
         myUpdateBtn = (ImageView)findViewById(R.id.title_update);
-        myUpdateBtn.setOnClickListener(this);
+        myUpdateBtn.setOnClickListener(this);//this指的是继承了onClickListener的MainActivity
 
         if(NetUtil.getNetworkState(this) != NetUtil.NETWORK_NONE) {
             Log.d("myWeather", "网络ok");
