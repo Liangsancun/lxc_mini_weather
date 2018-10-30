@@ -31,6 +31,8 @@ public class SelectCity extends Activity implements View.OnClickListener {
     //声明TextView对象，用于绑select_city布局文件中顶部栏的显示内容
     private TextView citySelected;
 
+    private String cityCode;//保存所选择城市代码，按返回键时返回该代码
+
 
     private List<City> list_of_city = MyApplication.getInstance().getCityList();
     int size = list_of_city.size();
@@ -55,7 +57,7 @@ public class SelectCity extends Activity implements View.OnClickListener {
             city[i] = list_of_city.get(i).getCity();
             Log.d("city", city[i]);
         }
-
+        
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_single_choice, city);
 
@@ -66,6 +68,7 @@ public class SelectCity extends Activity implements View.OnClickListener {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Toast.makeText(SelectCity.this, "你已经选择： " + city[i], Toast.LENGTH_SHORT).show();
                 citySelected.setText("现在选择城市： " + city[i]);
+                cityCode =  list_of_city.get(i).getNumber();
             }
 
         });
@@ -84,7 +87,7 @@ public class SelectCity extends Activity implements View.OnClickListener {
             case R.id.title_select_city_bar_back:
                 //在finish（）之前传递数据
                 Intent i = new Intent();
-                i.putExtra("cityCode", "101160101");
+                i.putExtra("cityCode", cityCode);//返回所选择城市的代码
                 setResult(RESULT_OK, i);
 
                 finish();
