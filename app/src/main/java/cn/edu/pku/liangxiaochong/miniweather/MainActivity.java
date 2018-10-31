@@ -33,6 +33,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private ImageView myCitySelectBtn;//为选择城市ImageView添加OnClick事件
     private TextView cityTv, timeTv, humidityTv, weekTv, pmDataTv, pmQualityTv,temperatureTv, climateTv, windTv, city_name_Tv;
     private ImageView weatherImg, pmImg;
+    private String sendedCode = "101010100";
 
     private Handler myHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
@@ -162,12 +163,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if(view.getId() == R.id.title_city_manager) {
             Intent i = new Intent(this, SelectCity.class);
             //startActivity(i);
+            //startActivityForResult(Intent intent, int requestCode) 方法打开新的 Activity，
+            // 我们需要为 startActivityForResult() 方法传入一个请求码 (第二个参数)。
+            // 请求码的值是根据业务需要由自已设定，用于标识请求来源
             startActivityForResult(i,1);
         }
 
         if(view.getId() == R.id.title_update) {
             SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
-            String cityCode = sharedPreferences.getString("main_city", "101010100");
+            String cityCode = sharedPreferences.getString("main_city", sendedCode);
             Log.d("myWeather", cityCode);
 
 
@@ -183,10 +187,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
     }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    //打开新的Activity（eg:SelectCity），当它关闭之后，MainActivity会自动调用onActivityResult方法
+    protected void onActivityResult(int requestCode, int resultCode, Intent i) {
         if(requestCode == 1 && resultCode == RESULT_OK) {
-            String newCityCode = data.getStringExtra("cityCode");
+            String newCityCode = i.getStringExtra("cityCode");
+            sendedCode = newCityCode;//用全局变量保存返回的所挑选的城市代码
             Log.d("myWeather", "选择的城市代码为" + newCityCode);
 
             if(NetUtil.getNetworkState(this) != NetUtil.NETWORK_NONE) {
