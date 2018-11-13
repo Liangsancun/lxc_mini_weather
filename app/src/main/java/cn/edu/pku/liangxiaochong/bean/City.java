@@ -32,5 +32,6 @@ public class City {
     public String getAllFirstPY() {
         return allFirstPY;
     }
+    public String getAllPY() {return  allPY; }
 
 }

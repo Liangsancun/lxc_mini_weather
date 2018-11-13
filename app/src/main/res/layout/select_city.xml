@@ -41,25 +41,58 @@
 
     </RelativeLayout>
 
-
-
-    <!--工具栏下面选择城市-->
+    <!--搜索一栏-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_below="@id/title_select_city_bar"
+        android:id="@+id/title_select_city_search_bar">
+
+        <!--weight=1,随着输入，使内容充满整个文本框
+        图标也在文本框内
+        drawableLeft把图标放在输入文字的左边，hint提示信息
+        drawablePadding图标与输入文字的距离
+        即便图片在drawable-xhdpi，引入是依旧把地址写成drawable即可
+        layout_margin，是文本框和其父控件（线性布局的上下左右相距距离）
+        imeOptions="actionSearch"弹出的键盘中带有搜索功能-->
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="搜索全国城市（中文/拼音）"
+            android:layout_margin="10dip"
+            android:imeOptions="actionSearch"
+
+            android:drawableLeft="@drawable/search_city_box_icon"
+            android:drawablePadding="8.0dip"
+            android:singleLine="true"
+
+            android:paddingLeft="10.0dip"
+            android:paddingRight="30.0dip"
+            android:background="@drawable/search_box_background"
+            android:textColor="#ff000000"
+            android:textColorHint="#ffcccccc"
+            android:textSize="15.0sp"
+            android:id="@+id/title_select_city_search_bar_textbox"
+            />
+
+    </LinearLayout>
+
+
+    <!--搜索框下面显示供选择的城市-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/title_select_city_search_bar"
         android:id="@+id/title_select_city_content">
 
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
             android:background="#ffffff"
             android:choiceMode="singleChoice"
-            android:id="@+id/title_select_city_content_search_city_list"
+            android:id="@+id/title_select_city_content_city_list"
             android:dividerHeight="2dip">
-
-
         </ListView>
     </LinearLayout>
 

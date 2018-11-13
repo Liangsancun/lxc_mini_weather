@@ -16,13 +16,9 @@ import cn.edu.pku.liangxiaochong.db.CityDB;
 
 public class MyApplication extends Application {
     private static final String TAG = "MyAPP";
-
     private static MyApplication myApplication;
-
     private CityDB myCityDB;
     private List<City> myCityList;
-
-
 
     @Override
     public void onCreate() {
@@ -51,9 +47,10 @@ public class MyApplication extends Application {
         int i = 0;
         for(City city : myCityList) {
             i++;
+            String cityProvince = city.getProvince();
             String cityName = city.getCity();
             String cityCode = city.getNumber();
-            Log.d(TAG, cityCode+":"+cityName);
+            Log.d(TAG, cityCode+":"+cityProvince+" "+cityName);
         }
         Log.d(TAG, "i="+i);
         return true;

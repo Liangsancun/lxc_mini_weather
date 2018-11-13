@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+toDegrees是最终完成时旋转到的角度，值越大，转的越快
+pivotX="50.0%"，从左到右到宽度的50%
+pivotY="50.0%"，从上到下到高度的50%
+pivotX,pivotY确定了旋转的中心点
+drawable,旋转的图片
+-->
+<animated-rotate
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/update"
+    android:fromDegrees="0.0"
+    android:pivotX="50.0%"
+    android:pivotY="50.0%"
+    android:toDegrees="1080.0">
+
+</animated-rotate>

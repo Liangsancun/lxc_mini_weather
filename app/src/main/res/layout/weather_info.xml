@@ -26,33 +26,70 @@
             android:background="#A71717" />
         <TextView
             android:layout_toRightOf="@id/title_seperator"
-
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:textColor="@android:color/white"
             android:textSize="22.0sp"
             android:text="郑州天气"
-            android:id="@+id/title_city_name"
-            />
-        <ImageView
+            android:id="@+id/title_city_name" />
+
+
+        <!--以前的布局是这样的:
+            把刷新图标排在最右侧,然后在它左边贴着放一个分享按钮,在分
+            享按钮的左边贴着放一个定位按钮。但是 toLeftOf 对 FrameLayout 就没有那种效果
+            了,所以用一个 LinearLayout-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:layout_width="50.0dip"
-            android:layout_height="50.0dip"
-            android:src="@drawable/update"
-            android:id="@+id/title_update"/>
-        <ImageView
-            android:layout_toLeftOf="@id/title_update"
-            android:layout_width="50.0dip"
-            android:layout_height="50.0dip"
-            android:src="@drawable/share"
-            android:id="@+id/title_share" />
-        <ImageView
-            android:layout_width="50.0dip"
-            android:layout_height="50.0dip"
-            android:layout_toLeftOf="@id/title_share"
-            android:src="@drawable/location"
-            android:id="@+id/title_location"/>
+            android:orientation="horizontal">
+
+            <!--定位按钮-->
+            <ImageView
+                android:layout_width="50.0dip"
+                android:layout_height="50.0dip"
+                android:src="@drawable/location"
+                android:id="@+id/title_location"/>
+
+            <!--分享按钮-->
+            <ImageView
+                android:layout_width="50.0dip"
+                android:layout_height="50.0dip"
+                android:src="@drawable/share"
+                android:id="@+id/title_share"/>
+
+            <!--刷新按钮
+
+               -->
+            <FrameLayout
+                android:layout_width="50.0dip"
+                android:layout_height="50.0dip"
+                android:layout_alignParentRight="true"
+                android:id="@+id/title_update">
+                <!--静态图片-->
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/update"
+                    android:id="@+id/title_update_static"/>
+                <!--
+                旋转图片
+                visibility=gone, 控件不可见，不占屏幕控件
+                刚开始动态的让它不显示-->
+                <ProgressBar
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    style="@style/title_update_progessbar_style"
+                    android:id="@+id/title_update_progress"
+                    android:visibility="gone"/>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+
+
 
     </RelativeLayout>
 

@@ -8,6 +8,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,12 +35,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private TextView cityTv, timeTv, humidityTv, weekTv, pmDataTv, pmQualityTv,temperatureTv, climateTv, windTv, city_name_Tv;
     private ImageView weatherImg, pmImg;
     private String sendedCode = "101010100";
+    private ProgressBar myUpdateProgressBar;//刷新按钮动画
 
     private Handler myHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
+            //根据收到的消息的what类型处理
+            //更新今日天气
             switch(msg.what) {
                 case UPDATE_TODAY_WEATHER:
                     updateTodayWeather((TodayWeather)msg.obj);
+                    //刷新结束，静态刷新图片显示，动态刷新图片隐藏且不占用屏幕
+                    myUpdateBtn.setVisibility(View.VISIBLE);
+                    myUpdateProgressBar.setVisibility(View.GONE);
                     break;
                  default:
                     break;
@@ -52,7 +59,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.weather_info);
 
-        myUpdateBtn = (ImageView)findViewById(R.id.title_update);
+        myUpdateProgressBar = (ProgressBar)findViewById(R.id.title_update_progress);
+        myUpdateBtn = (ImageView)findViewById(R.id.title_update_static);
         myUpdateBtn.setOnClickListener(this);//this指的是继承了onClickListener的MainActivity
 
         if(NetUtil.getNetworkState(this) != NetUtil.NETWORK_NONE) {
@@ -103,7 +111,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     /*
     @param cityCode
      */
+    //以城市代码，连接天气预报网站，查询该城市的天气情况
     public void queryWeatherCode(String cityCode) {
+
         final String address = "http://wthrcdn.etouch.cn/WeatherApi?citykey=" + cityCode;
         Log.d("myWeather", address);
         new Thread(new Runnable() {
@@ -159,7 +169,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-
         if(view.getId() == R.id.title_city_manager) {
             Intent i = new Intent(this, SelectCity.class);
             //startActivity(i);
@@ -168,21 +177,23 @@ public class MainActivity extends Activity implements View.OnClickListener {
             // 请求码的值是根据业务需要由自已设定，用于标识请求来源
             startActivityForResult(i,1);
         }
-
-        if(view.getId() == R.id.title_update) {
+        if(view.getId() == R.id.title_update_static) {
             SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
             String cityCode = sharedPreferences.getString("main_city", sendedCode);
             Log.d("myWeather", cityCode);
 
-
             if(NetUtil.getNetworkState(this) != NetUtil.NETWORK_NONE) {
                 Log.d("myWeather", "网络ok");
-                queryWeatherCode(cityCode);
+                //图片转起来
+                myUpdateBtn.setVisibility(View.GONE);//静态刷新图片控件不占屏幕，不可见
+                myUpdateProgressBar.setVisibility(View.VISIBLE);//显示动态刷新图片
+
+                queryWeatherCode(cityCode);//获取网络数据，以城市代码，连接天气预报网络，查询该城市的情况
             }else {
                 Log.d("myWeather", "网路故障");
                 Toast.makeText(MainActivity.this, "网络故障", Toast.LENGTH_LONG).show();
-
             }
+
         }
 
 
