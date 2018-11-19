@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="3">
+
+        <!--权重，总权重3，每个宽为0dip,权重为1，得到宽度上有3个天气情况平分屏幕-->
+
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:id="@+id/pagelayout1">
+
+            <!--未来某一天的天气情况-->
+
+            <!--星期-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="星期五"
+                android:textColor="#ffffff"
+                android:id="@+id/future_date1"/>
+
+            <!--图片-->
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/dayu"
+                android:id="@+id/future_weather_img1" />
+            <!--温度-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="高温"
+                android:textColor="#ffffff"
+                android:id="@+id/future_temper1"/>
+            <!--天气-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="晴"
+                android:textColor="#ffffff"
+                android:id="@+id/future_type1"/>
+            <!--风-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textColor="#ffffff"
+                android:text="好几级"
+                android:id="@+id/future_fengli1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:id="@+id/pagelayout2">
+
+            <!--未来某一天的天气情况-->
+
+            <!--星期-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="星期五"
+                android:textColor="#ffffff"
+                android:id="@+id/future_date2"/>
+
+            <!--图片-->
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/dayu"
+                android:id="@+id/future_weather_img2" />
+            <!--温度-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="低温"
+                android:textColor="#ffffff"
+                android:id="@+id/future_temper2"/>
+            <!--天气-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="晴"
+                android:textColor="#ffffff"
+                android:id="@+id/future_type2"/>
+            <!--风-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="小风"
+                android:textColor="#ffffff"
+                android:id="@+id/future_fengli2"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:id="@+id/pagelayout3">
+
+            <!--未来某一天的天气情况-->
+
+            <!--星期-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="星期五"
+                android:textColor="#ffffff"
+                android:id="@+id/future_date3"/>
+
+            <!--图片-->
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/dayu"
+                android:id="@+id/future_weather_img3" />
+            <!--温度-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="高温"
+                android:textColor="#ffffff"
+                android:id="@+id/future_temper3"/>
+            <!--天气类型-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="晴"
+                android:textColor="#ffffff"
+                android:id="@+id/future_type3"/>
+            <!--风-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="大风"
+                android:textColor="#ffffff"
+                android:id="@+id/future_fengli3"/>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
