@@ -15,6 +15,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
+
 import org.w3c.dom.Text;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -39,12 +42,14 @@ import cn.edu.pku.liangxiaochong.bean.TodayWeather;
 public class MainActivity extends Activity implements View.OnClickListener {
 
     private static final int UPDATE_TODAY_WEATHER = 1;
+    private static final int DB=2;
     private ImageView myUpdateBtn;
     private ImageView myCitySelectBtn;//为选择城市ImageView添加OnClick事件
     private TextView cityTv, timeTv, humidityTv, weekTv, pmDataTv, pmQualityTv,temperatureTv, climateTv, windTv, city_name_Tv;
     private ImageView weatherImg, pmImg;
     private String sendedCode = "101010100";
     private ProgressBar myUpdateProgressBar;//刷新按钮动画
+    private ImageView myLocation;//我的定位
 
     private ViewPager myViewPager;//滑动视图
     private MyPagerAdapter myPagerAdapter;//滑动适配器
@@ -55,6 +60,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     //最近六天的天气所用到的控件
     private TextView date11,date0,date1, date2, date3,date4,type11,type0,type1,type2,type3,type4,fengli11,fengli0,fengli1,fengli2,fengli3,fengli4,temper11,temper0,temper1,temper2,temper3,temper4;
 
+    //定位
+    public LocationClient myLocationClient=null;
+    private MyLocationListener myLocationListener = new MyLocationListener();
 
 
     private Handler myHandler = new Handler() {
@@ -74,6 +82,29 @@ public class MainActivity extends Activity implements View.OnClickListener {
             }
         }
     };
+    private Handler BDHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            Log.d("响应", "收到线程给的结果");
+            switch (msg.what) {
+                case DB:
+                    if(msg.obj != null) {
+                        if(NetUtil.getNetworkState(MainActivity.this)!=NetUtil.NETWORK_NONE) {
+                            Log.d("myWeather", "网络ok");
+                            queryWeatherCode(myLocationListener.cityCode);
+                        }else {
+                            Log.d("myWeather", "网络挂了");
+                            Toast.makeText(MainActivity.this, "网络挂了", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    myLocationListener.cityCode=null;
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
+
 
     @Override //ActivityT
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,12 +123,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
             Log.d("myWeather", "网络故障");
             Toast.makeText(MainActivity.this, "网络有故障", Toast.LENGTH_LONG).show();
         }
-
+        //选择城市
         myCitySelectBtn = (ImageView)findViewById(R.id.title_city_manager);
         myCitySelectBtn.setOnClickListener(this);
 
         initPagerView();//初始化滑动视图
         initView();
+
+
+
+        myLocation=(ImageView)findViewById(R.id.title_location);
+        myLocation.setOnClickListener(this);
+
     }
 
     void initPagerView() {
@@ -124,6 +161,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         climateTv = (TextView)findViewById(R.id.weather_today_news_words_climate);
         windTv = (TextView)findViewById(R.id.weather_today_news_words_wind);
         weatherImg = (ImageView)findViewById(R.id.weather_today_news_image);
+
 
         date11=list_paper_view.get(0).findViewById(R.id.future_date1);
         date0=list_paper_view.get(0).findViewById(R.id.future_date2);
@@ -199,6 +237,85 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     }
 
+    private void initLocation() {
+        //定位
+        myLocationClient=new LocationClient(getApplicationContext());//声明LocationClient类
+        myLocationClient.registerLocationListener(myLocationListener);//注册监听函数
+
+
+        LocationClientOption option=new LocationClientOption();
+        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);//可选，定位模式，默认高精度
+        option.setCoorType("bd09ll");//可选，返回的定位结果坐标系，设为百度，默认gcj02，
+        option.setScanSpan(1000);//连续定位请求的间隔，设为1000ms，默认0，为仅定位一次。
+        option.setIsNeedAddress(true);//需要地址信息
+        option.setOpenGps(true);//开启GPS定位，默认不开启
+        option.setIsNeedLocationDescribe(true);//需要地址描述
+        option.setIgnoreKillProcess(true);//定位sdk内部是一个service，并放到了独立进程，在stop的时候，不杀死该进程，默认不杀死
+        myLocationClient.setLocOption(option);//给myLocationClient配置定位参数
+
+        myLocationClient.start();//开启定位客户端
+
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view.getId() == R.id.title_city_manager) {
+            Intent i = new Intent(this, SelectCity.class);
+            //startActivity(i);
+            //startActivityForResult(Intent intent, int requestCode) 方法打开新的 Activity，
+            // 我们需要为 startActivityForResult() 方法传入一个请求码 (第二个参数)。
+            // 请求码的值是根据业务需要由自已设定，用于标识请求来源，哪个按钮发出的请求
+            startActivityForResult(i,1);
+        } if(view.getId()==R.id.title_location) {
+            Toast.makeText(this, "点击图标响应没问题", Toast.LENGTH_SHORT).show();
+            initLocation();//配置定位客户端相关信息，并开启
+            if(myLocationClient.isStarted()) {
+                myLocationClient.stop();
+            }
+            myLocationClient.start();
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        while(myLocationListener.cityCode==null) {
+                            Thread.sleep(1000);
+                        }
+                        Message msg=new Message();
+                        msg.what=DB;
+                        msg.obj=myLocationListener.cityCode;
+                        BDHandler.sendMessage(msg);
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }).start();
+
+
+        }if(view.getId() == R.id.title_update_static) {
+            SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
+            String cityCode = sharedPreferences.getString("main_city", sendedCode);
+            Log.d("myWeather", cityCode);
+
+            if(NetUtil.getNetworkState(this) != NetUtil.NETWORK_NONE) {
+                Log.d("myWeather", "网络ok");
+                //图片转起来
+                myUpdateBtn.setVisibility(View.GONE);//静态刷新图片控件不占屏幕，不可见
+                myUpdateProgressBar.setVisibility(View.VISIBLE);//显示动态刷新图片
+
+                queryWeatherCode(cityCode);//获取网络数据，以城市代码，连接天气预报网络，查询该城市的情况
+            }else {
+                Log.d("myWeather", "网路故障");
+                Toast.makeText(MainActivity.this, "网络故障", Toast.LENGTH_LONG).show();
+            }
+
+        }
+
+
+    }
+
 
     /*
     @param cityCode
@@ -257,39 +374,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 }
             }
         }).start();
-    }
-
-    @Override
-    public void onClick(View view) {
-        if(view.getId() == R.id.title_city_manager) {
-            Intent i = new Intent(this, SelectCity.class);
-            //startActivity(i);
-            //startActivityForResult(Intent intent, int requestCode) 方法打开新的 Activity，
-            // 我们需要为 startActivityForResult() 方法传入一个请求码 (第二个参数)。
-            // 请求码的值是根据业务需要由自已设定，用于标识请求来源，哪个按钮发出的请求
-            startActivityForResult(i,1);
-        }
-        if(view.getId() == R.id.title_update_static) {
-            SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
-            String cityCode = sharedPreferences.getString("main_city", sendedCode);
-            Log.d("myWeather", cityCode);
-
-            if(NetUtil.getNetworkState(this) != NetUtil.NETWORK_NONE) {
-                Log.d("myWeather", "网络ok");
-                //图片转起来
-                myUpdateBtn.setVisibility(View.GONE);//静态刷新图片控件不占屏幕，不可见
-                myUpdateProgressBar.setVisibility(View.VISIBLE);//显示动态刷新图片
-
-                queryWeatherCode(cityCode);//获取网络数据，以城市代码，连接天气预报网络，查询该城市的情况
-            }else {
-                Log.d("myWeather", "网路故障");
-                Toast.makeText(MainActivity.this, "网络故障", Toast.LENGTH_LONG).show();
-            }
-
-        }
 
 
     }
+
+
     @Override
     //该activity关闭后，跳转到其他activity，在接收到返回数据时，会自动调用该方法
     //一般和startActivityForResult配套使用，场景：主activity发出请求跳转到新activity，并期望返回数据
@@ -371,9 +460,32 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                // Log.d("myWeather", "quality:  " + xmlPullParser.getText());
                             } else if (xmlPullParser.getName().equals("fengxiang") && fengxiangCount == 0) {
                                 eventType = xmlPullParser.next();
-                                todayWeather.setFengxiang(xmlPullParser.getText());
+                                todayWeather.setFx(xmlPullParser.getText());
                                 //Log.d("myWeather", "fengxiang:  " + xmlPullParser.getText());
                                 fengxiangCount++;
+                            } else if (xmlPullParser.getName().equals("fengxiang") && fengxiangCount == 1) {
+                                eventType = xmlPullParser.next();
+                                todayWeather.setFx1(xmlPullParser.getText());
+                                //Log.d("myWeather", "fengxiang:  " + xmlPullParser.getText());
+                                fengxiangCount++;
+                            } else if (xmlPullParser.getName().equals("fengxiang") && fengxiangCount == 2) {
+                                eventType = xmlPullParser.next();
+                                todayWeather.setFx2(xmlPullParser.getText());
+                                //Log.d("myWeather", "fengxiang:  " + xmlPullParser.getText());
+                                fengxiangCount++;
+                            } else if (xmlPullParser.getName().equals("fengxiang") && fengxiangCount == 3) {
+                                eventType = xmlPullParser.next();
+                                todayWeather.setFx3(xmlPullParser.getText());
+                                //Log.d("myWeather", "fengxiang:  " + xmlPullParser.getText());
+                                fengxiangCount++;
+                            } else if (xmlPullParser.getName().equals("fengxiang") && fengxiangCount == 4) {
+                                eventType = xmlPullParser.next();
+                                todayWeather.setFx4(xmlPullParser.getText());
+                                //Log.d("myWeather", "fengxiang:  " + xmlPullParser.getText());
+                                fengxiangCount++;
+                            } else if(xmlPullParser.getName().equals("fx_1")) {
+                                eventType = xmlPullParser.next();
+                                todayWeather.setFx11(xmlPullParser.getText());
                             } else if (xmlPullParser.getName().equals("fengli") && fengliCount == 0) {
                                 eventType = xmlPullParser.next();
                                 todayWeather.setFengli(xmlPullParser.getText());
@@ -553,7 +665,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         weekTv.setText(todayWeather.getDate());
         temperatureTv.setText(todayWeather.getHigh() + "~" + todayWeather.getLow());
         climateTv.setText(todayWeather.getType());
-        windTv.setText("风力" + todayWeather.getFengli());
+        windTv.setText(todayWeather.getFx()+ todayWeather.getFengli());
         Toast.makeText(MainActivity.this, "更新成功", Toast.LENGTH_SHORT).show();
 
         date11.setText(todayWeather.getDate11());
@@ -563,12 +675,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
         date3.setText(todayWeather.getDate3());
         date4.setText(todayWeather.getDate4());
 
-        fengli11.setText(todayWeather.getFengli11());
-        fengli0.setText(todayWeather.getFengli());
-        fengli1.setText(todayWeather.getFengli1());
-        fengli2.setText(todayWeather.getFengli2());
-        fengli3.setText(todayWeather.getFengli3());
-        fengli4.setText(todayWeather.getFengli4());
+        fengli11.setText(todayWeather.getFx11()+todayWeather.getFengli11());
+        fengli0.setText(todayWeather.getFx()+todayWeather.getFengli());
+        fengli1.setText(todayWeather.getFx1()+todayWeather.getFengli1());
+        fengli2.setText(todayWeather.getFx2()+todayWeather.getFengli2());
+        fengli3.setText(todayWeather.getFx3()+todayWeather.getFengli3());
+        fengli4.setText(todayWeather.getFx4()+todayWeather.getFengli4());
 
         type11.setText(todayWeather.getType11());
         type0.setText(todayWeather.getType());

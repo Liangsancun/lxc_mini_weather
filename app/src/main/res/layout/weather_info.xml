@@ -300,11 +300,17 @@
                 </LinearLayout>
             </RelativeLayout>
         </RelativeLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="30.0dip"
+            android:id="@+id/nothing_bar"/>
         <!--future weather-->
         <android.support.v4.view.ViewPager
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/weather_today"
+            android:layout_below="@id/nothing_bar"
+            android:layout_margin="10.0dip"
             android:id="@+id/view_pager">
 
         </android.support.v4.view.ViewPager>

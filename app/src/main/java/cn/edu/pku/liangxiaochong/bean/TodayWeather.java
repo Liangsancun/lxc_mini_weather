@@ -7,7 +7,7 @@ public class TodayWeather {
     private String shidu;
     private String pm25;
     private String quality;
-    private String fengxiang;
+    private String fx;
     private String fengli;
     private String date;
     private String high;
@@ -20,6 +20,7 @@ public class TodayWeather {
     private String low11;
     private String type11;
     private String fengli11;
+    private String fx11;
 
     //明天
     private String date1;
@@ -27,24 +28,28 @@ public class TodayWeather {
     private String low1;
     private String type1;
     private String fengli1;
+    private String fx1;
     //后天
     private String date2;
     private String high2;
     private String low2;
     private String type2;
     private String fengli2;
+    private String fx2;
 
     private String date3;
     private String high3;
     private String low3;
     private String type3;
     private String fengli3;
+    private String fx3;
 
     private String date4;
     private String high4;
     private String low4;
     private String type4;
     private String fengli4;
+    private String fx4;
 
 
 
@@ -66,8 +71,8 @@ public class TodayWeather {
     public String getQuality() {
         return quality;
     }
-    public String getFengxiang() {
-        return fengxiang;
+    public String getFx() {
+        return fx;
     }
     public String getFengli() { return fengli;}
     public String getDate() {
@@ -94,6 +99,7 @@ public class TodayWeather {
     public String getType11() {
         return type11;
     }
+    public String getFx11() { return fx11;}
 
 
     public String getFengli1() { return fengli1;}
@@ -109,6 +115,7 @@ public class TodayWeather {
     public String getType1() {
         return type1;
     }
+    public String getFx1() { return fx1;}
 
     public String getFengli2() { return fengli2;}
     public String getDate2() {
@@ -123,6 +130,7 @@ public class TodayWeather {
     public String getType2() {
         return type2;
     }
+    public String getFx2() { return fx2;}
 
     public String getFengli3() { return fengli3;}
     public String getDate3() {
@@ -137,6 +145,7 @@ public class TodayWeather {
     public String getType3() {
         return type3;
     }
+    public String getFx3() {return fx3;}
 
     public String getFengli4() { return fengli4;}
     public String getDate4() {
@@ -151,6 +160,7 @@ public class TodayWeather {
     public String getType4() {
         return type4;
     }
+    public String getFx4() { return fx4;}
 
 
     public void setCity(String city) {
@@ -171,8 +181,8 @@ public class TodayWeather {
     public void setQuality(String quality) {
         this.quality = quality;
     }
-    public void setFengxiang(String fengxiang) {
-        this.fengxiang = fengxiang;
+    public void setFx(String fengxiang) {
+        this.fx = fengxiang;
     }
     public void setFengli(String fengli)  {
         this.fengli = fengli;
@@ -205,6 +215,9 @@ public class TodayWeather {
     public void setType11(String type) {
         this.type11 = type;
     }
+    public void setFx11(String fengxiang) {
+        this.fx11 = fengxiang;
+    }
 
 
     public void setFengli1(String fengli)  {
@@ -222,6 +235,9 @@ public class TodayWeather {
     public void setType1(String type) {
         this.type1 = type;
     }
+    public void setFx1(String fengxiang) {
+        this.fx1 = fengxiang;
+    }
 
     public void setFengli2(String fengli)  {
         this.fengli2 = fengli;
@@ -237,6 +253,9 @@ public class TodayWeather {
     }
     public void setType2(String type) {
         this.type2 = type;
+    }
+    public void setFx2(String fengxiang) {
+        this.fx2 = fengxiang;
     }
 
     public void setFengli3(String fengli)  {
@@ -254,6 +273,9 @@ public class TodayWeather {
     public void setType3(String type) {
         this.type3 = type;
     }
+    public void setFx3(String fengxiang) {
+        this.fx3 = fengxiang;
+    }
 
     public void setFengli4(String fengli)  {
         this.fengli4 = fengli;
@@ -270,6 +292,9 @@ public class TodayWeather {
     public void setType4(String type) {
         this.type4 = type;
     }
+    public void setFx4(String fengxiang) {
+        this.fx4 = fengxiang;
+    }
 
 
 
@@ -284,7 +309,7 @@ public class TodayWeather {
                 ", shidu=\'" + shidu + "\'" +
                 ", pm25=\'" + pm25 + "\'" +
                 ", quality=\'" + quality + "\'" +
-                ", fengxiang=\'" + fengxiang + "\'" +
+                ", fengxiang=\'" + fx + "\'" +
                 ", fengli=\'" + fengli + "\'" +
                 ", date=\'" + date + "\'" +
                 ", high=\'" + high + "\'" +
