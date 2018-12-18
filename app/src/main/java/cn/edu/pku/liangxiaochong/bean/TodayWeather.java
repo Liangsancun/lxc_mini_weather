@@ -66,7 +66,10 @@ public class TodayWeather {
         return shidu;
     }
     public String getPm25() {
-        return pm25;
+        if(pm25 != null)
+            return pm25;
+        else
+            return "0";
     }
     public String getQuality() {
         return quality;

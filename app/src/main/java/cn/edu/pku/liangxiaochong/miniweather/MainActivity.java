@@ -1,10 +1,13 @@
 package cn.edu.pku.liangxiaochong.miniweather;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -28,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -38,6 +42,7 @@ import cn.edu.pku.liangxiaochong.bean.FutureThreeWeather;
 
 import cn.edu.pku.liangxiaochong.util.NetUtil;
 import cn.edu.pku.liangxiaochong.bean.TodayWeather;
+import cn.edu.pku.liangxiaochong.util.Pinyin;
 
 public class MainActivity extends Activity implements View.OnClickListener, ViewPager.OnPageChangeListener{
 
@@ -59,6 +64,8 @@ public class MainActivity extends Activity implements View.OnClickListener, View
 
     //最近六天的天气所用到的控件
     private TextView date11,date0,date1, date2, date3,date4,type11,type0,type1,type2,type3,type4,fengli11,fengli0,fengli1,fengli2,fengli3,fengli4,temper11,temper0,temper1,temper2,temper3,temper4;
+    private ImageView weatherImg11,weatherImg0,weatherImg1,weatherImg2,weatherImg3,weatherImg4;
+
 
     //定位
     public LocationClient myLocationClient=null;
@@ -186,6 +193,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         date3=list_paper_view.get(1).findViewById(R.id.future_date2);
         date4=list_paper_view.get(1).findViewById(R.id.future_date3);
 
+
         fengli11=list_paper_view.get(0).findViewById(R.id.future_fengli1);
         fengli0=list_paper_view.get(0).findViewById(R.id.future_fengli2);
         fengli1=list_paper_view.get(0).findViewById(R.id.future_fengli3);
@@ -206,6 +214,13 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         temper2=list_paper_view.get(1).findViewById(R.id.future_temper1);
         temper3=list_paper_view.get(1).findViewById(R.id.future_temper2);
         temper4=list_paper_view.get(1).findViewById(R.id.future_temper3);
+
+        weatherImg11=list_paper_view.get(0).findViewById(R.id.future_weather_img1);
+        weatherImg0=list_paper_view.get(0).findViewById(R.id.future_weather_img2);
+        weatherImg1=list_paper_view.get(0).findViewById(R.id.future_weather_img3);
+        weatherImg2=list_paper_view.get(1).findViewById(R.id.future_weather_img1);
+        weatherImg3=list_paper_view.get(1).findViewById(R.id.future_weather_img2);
+        weatherImg4=list_paper_view.get(1).findViewById(R.id.future_weather_img3);
 
 
 
@@ -284,7 +299,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
             // 请求码的值是根据业务需要由自已设定，用于标识请求来源，哪个按钮发出的请求
             startActivityForResult(i,1);
         } if(view.getId()==R.id.title_location) {
-            Toast.makeText(this, "点击图标响应没问题", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "点击图标响应没问题", Toast.LENGTH_SHORT).show();
             initLocation();//配置定位客户端相关信息，并开启
             if(myLocationClient.isStarted()) {
                 myLocationClient.stop();
@@ -682,6 +697,19 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         temperatureTv.setText(todayWeather.getHigh() + "~" + todayWeather.getLow());
         climateTv.setText(todayWeather.getType());
         windTv.setText(todayWeather.getFx()+ todayWeather.getFengli());
+        //更新图标
+        String type_pinyin = Pinyin.converterToSpell(todayWeather.getType());
+        int type_img_id=getTypeImgId(type_pinyin);
+        weatherImg.setImageResource(type_img_id);
+
+        String pm_value= todayWeather.getPm25().trim();//
+        int pmvalue = Integer.parseInt(pm_value);//得到pm25的值,int型
+        int pmImgId=getPmImgId(pmvalue);
+        pmImg.setImageResource(pmImgId);
+
+
+
+
         Toast.makeText(MainActivity.this, "更新成功", Toast.LENGTH_SHORT).show();
 
         date11.setText(todayWeather.getDate11());
@@ -712,6 +740,73 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         temper2.setText(todayWeather.getLow2()+"~"+todayWeather.getHigh2());
         temper3.setText(todayWeather.getLow3()+"~"+todayWeather.getHigh3());
         temper4.setText(todayWeather.getLow4()+"~"+todayWeather.getHigh4());
+
+        //更新滑动页面中的天气类型图标
+        String type11_img_pinyin = Pinyin.converterToSpell(todayWeather.getType11());
+        String type0_img_pinyin = Pinyin.converterToSpell(todayWeather.getType());
+        String type1_img_pinyin = Pinyin.converterToSpell(todayWeather.getType1());
+        String type2_img_pinyin = Pinyin.converterToSpell(todayWeather.getType2());
+        String type3_img_pinyin = Pinyin.converterToSpell(todayWeather.getType3());
+        String type4_img_pinyin = Pinyin.converterToSpell(todayWeather.getType4());
+
+        int type_img_id11 = getTypeImgId(type11_img_pinyin);
+        int type_img_id0 = getTypeImgId(type0_img_pinyin);
+        int type_img_id1 = getTypeImgId(type1_img_pinyin);
+        int type_img_id2 = getTypeImgId(type2_img_pinyin);
+        int type_img_id3 = getTypeImgId(type3_img_pinyin);
+        int type_img_id4 = getTypeImgId(type4_img_pinyin);
+
+        weatherImg11.setImageResource(type_img_id11);
+        weatherImg0.setImageResource(type_img_id0);
+        weatherImg1.setImageResource(type_img_id1);
+        weatherImg2.setImageResource(type_img_id2);
+        weatherImg3.setImageResource(type_img_id3);
+        weatherImg4.setImageResource(type_img_id4);
+    }
+
+    public int getPmImgId(int pmvalue) {
+        String pmImgStr = "0_50";//0-50和没有值的都是这个数
+        if(pmvalue>=51 && pmvalue<=100) {
+            pmImgStr = "51_100";
+        } else if(pmvalue>=101 && pmvalue<=150) {
+            pmImgStr = "101_150";
+        } else if(pmvalue>=151 && pmvalue<=200) {
+            pmImgStr = "151_200";
+        } else if(pmvalue>=201 && pmvalue<=300) {
+            pmImgStr = "201_300";
+        } else if(pmvalue>=301) {
+            pmImgStr = "greater_300";
+        }
+        R.drawable drawable = new R.drawable();
+        Class aclass = drawable.getClass();
+        int pmImgId = -1;
+        try {
+            Field pmField = aclass.getField("biz_plugin_weather_" + pmImgStr);
+            Object pmImg = pmField.get(aclass);
+            pmImgId = (int)pmImg;
+        } catch (Exception e) {
+            if(-1 == pmImgId) {
+                pmImgId = R.drawable.biz_plugin_weather_0_50;
+            }
+        }
+        return pmImgId;
+    }
+
+    public int getTypeImgId(String pinyin) {
+        R.drawable drawable = new R.drawable();
+        Class aclass = drawable.getClass();
+        int typeImgId=-1;
+        try {
+            Field field = aclass.getField(pinyin);//反射，通过变量名称生成field对象
+            Object value = field.get(aclass);//获取变量的值，即获得图片的id
+            typeImgId = (int)value;
+        } catch (Exception e) {
+
+            if(-1 == typeImgId)
+                typeImgId = R.drawable.qing;
+
+        }
+        return typeImgId;
     }
 
 
