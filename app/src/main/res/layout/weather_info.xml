@@ -314,6 +314,33 @@
             android:id="@+id/view_pager">
 
         </android.support.v4.view.ViewPager>
+
+
+    </LinearLayout>
+    <!--圆点-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:id="@+id/indictor">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/page_indicator_focused"
+            android:padding="5dip"
+            android:id="@+id/dot1"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/page_indicator_unfocused"
+            android:padding="5dip"
+            android:id="@+id/dot2"/>
+
+
     </LinearLayout>
 </RelativeLayout>
 

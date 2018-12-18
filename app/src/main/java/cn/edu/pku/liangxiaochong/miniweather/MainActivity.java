@@ -39,7 +39,7 @@ import cn.edu.pku.liangxiaochong.bean.FutureThreeWeather;
 import cn.edu.pku.liangxiaochong.util.NetUtil;
 import cn.edu.pku.liangxiaochong.bean.TodayWeather;
 
-public class MainActivity extends Activity implements View.OnClickListener {
+public class MainActivity extends Activity implements View.OnClickListener, ViewPager.OnPageChangeListener{
 
     private static final int UPDATE_TODAY_WEATHER = 1;
     private static final int DB=2;
@@ -64,6 +64,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public LocationClient myLocationClient=null;
     private MyLocationListener myLocationListener = new MyLocationListener();
 
+    private ImageView[] imgdots;//里面放两个ImageView类型的圆点
+    private int[] dotids={R.id.dot1, R.id.dot2};//里面是圆点的id
 
     private Handler myHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
@@ -96,7 +98,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                             Toast.makeText(MainActivity.this, "网络挂了", Toast.LENGTH_SHORT).show();
                         }
                     }
-                    myLocationListener.cityCode=null;
+                    myLocationListener.cityCode=null;//以免换地方之后的citycode不变。
                     break;
                 default:
                     break;
@@ -127,14 +129,25 @@ public class MainActivity extends Activity implements View.OnClickListener {
         myCitySelectBtn = (ImageView)findViewById(R.id.title_city_manager);
         myCitySelectBtn.setOnClickListener(this);
 
-        initPagerView();//初始化滑动视图
-        initView();
+        initPagerView();//初始化两个滑动视图
+        initDots();//初始化圆点
+        initView();//初始化界面控件
 
 
 
         myLocation=(ImageView)findViewById(R.id.title_location);
         myLocation.setOnClickListener(this);
 
+
+
+    }
+
+    public void initDots() {
+        imgdots=new ImageView[list_paper_view.size()];//有几个滑动页面
+        for(int i=0; i<imgdots.length; i++) {
+            imgdots[i]=(ImageView)findViewById(dotids[i]);
+
+        }
     }
 
     void initPagerView() {
@@ -145,7 +158,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         myPagerAdapter=new MyPagerAdapter(MainActivity.this, list_paper_view);
         myViewPager =(ViewPager)findViewById(R.id.view_pager);
+
         myViewPager.setAdapter(myPagerAdapter);
+
+        myViewPager.setOnPageChangeListener(this);//设置页面滑动监听，来改变小圆点
     }
 
     void initView() {
@@ -699,8 +715,25 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
 
+    @Override
+    public void onPageScrolled(int i, float v, int i1) {
 
+    }
 
+    @Override
+    public void onPageSelected(int i) {
+        for(int a=0; a<imgdots.length; a++) {
+            if(a==i) {
+                imgdots[a].setImageResource(R.drawable.page_indicator_focused);
+            }else {
+                imgdots[a].setImageResource(R.drawable.page_indicator_unfocused);
+            }
+        }
 
+    }
 
+    @Override
+    public void onPageScrollStateChanged(int i) {
+
+    }
 }
